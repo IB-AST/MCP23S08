@@ -22,17 +22,16 @@ MCP23S08::MCP23S08(uint8_t csPin, uint8_t deviceAddr) : csPin(csPin) {
 
 
 void MCP23S08::begin() {
-	SPI.beginTransaction(SPISettings(10000000, MSBFIRST, SPI_MODE0));
+
+	// set cs GPIO to output
 	pinMode(csPin, OUTPUT);
-	digitalWrite(csPin, LOW);
-	// reset all registers to default:
-	SPI.transfer(MCP23S08_IODIR);	//set address pointer to first register
-	SPI.transfer(0xFF);				// reset first register
-	for (uint8_t i = 0; i < MCP23S08_OLAT; i++) {
-		SPI.transfer(0x00);			// reset other 10 registers
-	}
-	digitalWrite(csPin, HIGH);
-	SPI.endTransaction();
+
+    // Set GP0 to output (Bit 0 = 0), all others remain inputs (Bit = 1)
+	setPinModes(0x01);
+
+    // Set OLAT to 0 (LOW on GP0) — optional, default is 0 anyway
+	setOutputStates(0x00);
+
 }
 
 
