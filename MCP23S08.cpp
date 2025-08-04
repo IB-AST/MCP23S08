@@ -30,7 +30,7 @@ void MCP23S08::begin() {
 	setPinModes(0x01);
 
     // Set OLAT to 0 (LOW on GP0) — optional, default is 0 anyway
-	setOutputStates(0x00);
+	setOutputStates(0xFF);    // ###TEST###
 
 }
 
